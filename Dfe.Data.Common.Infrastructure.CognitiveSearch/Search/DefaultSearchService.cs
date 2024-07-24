@@ -36,8 +36,8 @@ public sealed class DefaultSearchService : ISearchService
         string searchKeyword, string searchIndex, SearchOptions searchOptions)
         where TSearchResult : class
     {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(searchKeyword);
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(searchIndex);
+        ArgumentNullException.ThrowIfNullOrEmpty(searchKeyword);
+        ArgumentNullException.ThrowIfNullOrEmpty(searchIndex);
         ArgumentNullException.ThrowIfNull(searchOptions);
 
         return InvokeSearch(

@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Search.Model;
 
@@ -12,30 +12,30 @@ public sealed class Address
     /// <summary>
     /// 
     /// </summary>
-    [JsonProperty("municipality")]
+    [JsonPropertyName("municipality")]
     public string? Town { get; set; }
 
     /// <summary>
     /// 
     /// </summary>
-    [JsonProperty("countrySecondarySubdivision")]
+    [JsonPropertyName("countrySecondarySubdivision")]
     public string? County { get; set; }
 
     /// <summary>
     /// 
     /// </summary>
-    [JsonProperty("countrySubdivisionName")]
+    [JsonPropertyName("countrySubdivisionName")]
     public string? CountryName { get; set; }
 
     /// <summary>
     /// 
     /// </summary>
-    [JsonProperty("countrySubdivisionCode")]
+    [JsonPropertyName("countrySubdivisionCode")]
     public string? CountryCode { get; set; }
 
     /// <summary>
     /// 
     /// </summary>
-    [JsonProperty("freeformAddress")]
+    [JsonPropertyName("freeformAddress")]
     public string? FreeFormAddress { get; set; }
 }

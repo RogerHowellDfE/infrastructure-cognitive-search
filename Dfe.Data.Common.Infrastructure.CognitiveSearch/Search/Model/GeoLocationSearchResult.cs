@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Search.Model;
 
@@ -12,12 +12,12 @@ public class GeoLocationSearchResult
     /// <summary>
     /// 
     /// </summary>
-    [JsonProperty("address")]
+    [JsonPropertyName("address")]
     public Address? GeographicalAddress { get; set; }
 
     /// <summary>
     /// 
     /// </summary>
-    [JsonProperty("position")]
+    [JsonPropertyName("position")]
     public GeographicalPosition? GeographicalPosition { get; set; }
 }

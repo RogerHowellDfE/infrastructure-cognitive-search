@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Search.Model;
 
@@ -10,6 +10,6 @@ public class GeoLocationServiceResponse
     /// <summary>
     /// 
     /// </summary>
-    [JsonProperty("results")]
+    [JsonPropertyName("results")]
     public GeoLocationSearchResult[]? GeoLocationSearchResults { get; set; }
 }

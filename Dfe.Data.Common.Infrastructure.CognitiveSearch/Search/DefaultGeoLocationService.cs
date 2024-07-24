@@ -24,11 +24,10 @@ public sealed class DefaultGeoLocationService : IGeoLocationService
         IGeoLocationClientProvider geoLocationClientProvider,
         IOptions<AzureGeoLocationOptions> azureGeoLocationOptions)
     {
-        _geoLocationClientProvider = geoLocationClientProvider ??
-            throw new ArgumentNullException(nameof(geoLocationClientProvider));
+        ArgumentNullException.ThrowIfNull(azureGeoLocationOptions);
+        ArgumentNullException.ThrowIfNull(geoLocationClientProvider);
 
-        ArgumentNullException.ThrowIfNullOrEmpty(nameof(azureGeoLocationOptions));
-
+        _geoLocationClientProvider = geoLocationClientProvider;
         _azureGeoLocationOptions = azureGeoLocationOptions.Value;
     }
 
@@ -40,7 +39,7 @@ public sealed class DefaultGeoLocationService : IGeoLocationService
     /// <exception cref="JsonException"></exception>
     public Task<GeoLocationServiceResponse> SearchGeoLocationAsync(string location)
     {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(location);
+        ArgumentNullException.ThrowIfNullOrEmpty(location);
         ArgumentNullException.ThrowIfNullOrWhiteSpace(_azureGeoLocationOptions.SearchEndpointUri);
         ArgumentNullException.ThrowIfNullOrWhiteSpace(_azureGeoLocationOptions.MapsSubscriptionKey);
 

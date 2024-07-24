@@ -66,9 +66,9 @@ public sealed class AzureSearchClientProvider : ISearchClientProvider
     /// <returns></returns>
     private SearchClient CreateSearchClientInstance(string indexName)
     {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(indexName);
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(_azureSearchClientOptions.EndpointUri);
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(_azureSearchClientOptions.Credentials);
+        ArgumentNullException.ThrowIfNull(indexName);
+        ArgumentNullException.ThrowIfNullOrEmpty(_azureSearchClientOptions.EndpointUri);
+        ArgumentNullException.ThrowIfNullOrEmpty(_azureSearchClientOptions.Credentials);
 
         return new SearchClient(
             endpoint: new Uri(
