@@ -1,5 +1,4 @@
 ﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
-using Dfe.Data.Common.Infrastructure.CognitiveSearch.Shared.Providers;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.Search.TestDoubles;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.SearchByKeyword.TestDoubles.StubBuilders;
 using FluentAssertions;
@@ -8,7 +7,7 @@ using Xunit;
 
 namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.SearchByKeyword.Providers;
 
-public class SearchClientProviderTests
+public class SearchByKeywordClientProviderTests
 {
     private readonly Mock<ISearchIndexNamesProvider> _searchIndexNamesProvider = new();
 

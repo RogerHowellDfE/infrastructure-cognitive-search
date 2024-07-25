@@ -1,4 +1,4 @@
-﻿namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Shared.Options;
+﻿namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Options;
 
 /// <summary>
 /// 

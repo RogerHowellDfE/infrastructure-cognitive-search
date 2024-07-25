@@ -99,8 +99,6 @@ namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.SearchByGeoLocati
             Assert.Equal("The value cannot be an empty string. (Parameter 'location')", exception.Message);
         }
 
-        
-
         [Fact]
         public async Task SearchGeoLocationAsync_With_Positive_Succes_Status_Return_Expected_Result()
         {
@@ -124,7 +122,5 @@ namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.SearchByGeoLocati
             Assert.NotNull(result.GeoLocationSearchResults);
             Assert.IsType<GeoLocationServiceResponse>(result);
         }
-
-        
     }
 }

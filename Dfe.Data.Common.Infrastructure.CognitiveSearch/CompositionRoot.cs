@@ -4,7 +4,6 @@ using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByGeoLocation.Provide
 using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Options;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
-using Dfe.Data.Common.Infrastructure.CognitiveSearch.Shared.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

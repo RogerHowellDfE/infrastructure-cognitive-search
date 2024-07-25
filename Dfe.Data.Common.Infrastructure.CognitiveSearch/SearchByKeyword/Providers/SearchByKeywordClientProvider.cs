@@ -1,6 +1,5 @@
 ﻿using Azure;
 using Azure.Search.Documents;
-using Dfe.Data.Common.Infrastructure.CognitiveSearch.Shared.Providers;
 using Microsoft.Extensions.Options;
 
 namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;

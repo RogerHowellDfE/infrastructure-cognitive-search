@@ -3,7 +3,7 @@ using Azure.Search.Documents.Indexes;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Options;
 using Microsoft.Extensions.Options;
 
-namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Shared.Providers;
+namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
 
 /// <summary>
 /// 
