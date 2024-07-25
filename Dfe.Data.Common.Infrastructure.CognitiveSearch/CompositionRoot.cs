@@ -1,6 +1,10 @@
-﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.Options;
-using Dfe.Data.Common.Infrastructure.CognitiveSearch.Providers;
-using Dfe.Data.Common.Infrastructure.CognitiveSearch.Search;
+﻿using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByGeoLocation;
+using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByGeoLocation.Options;
+using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByGeoLocation.Providers;
+using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword;
+using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Options;
+using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByKeyword.Providers;
+using Dfe.Data.Common.Infrastructure.CognitiveSearch.Shared.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -18,7 +22,7 @@ public static class CompositionRoot
     /// <param name="services"></param>
     /// <param name="configuration"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public static void AddAzureCognitiveSearchProvider(this IServiceCollection services, IConfiguration configuration)
+    public static void AddDefaultCognitiveSearchServices(this IServiceCollection services, IConfiguration configuration)
     {
         if (services is null)
         {
@@ -26,37 +30,37 @@ public static class CompositionRoot
                 "A service collection is required to configure the azure cognitive search dependencies.");
         }
 
-        services.TryAddSingleton<ISearchClientProvider, AzureSearchClientProvider>();
+        services.TryAddSingleton<ISearchByKeywordClientProvider, SearchByKeywordClientProvider>();
         services.TryAddSingleton<ISearchIndexNamesProvider, SearchIndexNamesProvider>();
-        services.TryAddSingleton<ISearchService, DefaultSearchService>();
+        services.TryAddSingleton<ISearchByKeywordService, DefaultSearchByKeywordService>();
         services.TryAddScoped<IGeoLocationClientProvider, GeoLocationClientProvider>();
         services.TryAddScoped<IGeoLocationService, DefaultGeoLocationService>();
 
-        services.AddOptions<AzureSearchClientOptions>()
+        services.AddOptions<SearchByKeywordClientOptions>()
            .Configure<IConfiguration>(
                (settings, configuration) =>
                    configuration
-                       .GetSection("AzureCognitiveSearchOptions:AzureSearchClientOptions")
+                       .GetSection(nameof(SearchByKeywordClientOptions))
                        .Bind(settings));
 
-        services.AddOptions<AzureGeoLocationOptions>()
+        services.AddOptions<GeoLocationOptions>()
            .Configure<IConfiguration>(
                (settings, configuration) =>
                    configuration
-                       .GetSection(nameof(AzureGeoLocationOptions))
+                       .GetSection(nameof(GeoLocationOptions))
                        .Bind(settings));
 
         services.AddHttpClient("GeoLocationHttpClient", config =>
         {
-            var azureGeoLocationOptions =
+            var geoLocationOptions =
                 configuration
-                    .GetSection("AzureGeoLocationOptions").Get<AzureGeoLocationOptions>();
+                    .GetSection(nameof(GeoLocationOptions)).Get<GeoLocationOptions>();
 
-            ArgumentNullException.ThrowIfNull(azureGeoLocationOptions);
-            ArgumentNullException.ThrowIfNullOrWhiteSpace(azureGeoLocationOptions.MapsServiceUri);
+            ArgumentNullException.ThrowIfNull(geoLocationOptions);
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(geoLocationOptions.MapsServiceUri);
 
-            config.BaseAddress = new Uri(azureGeoLocationOptions.MapsServiceUri);
-            config.Timeout = new TimeSpan(0, 0, 30);
+            config.BaseAddress = new Uri(geoLocationOptions.MapsServiceUri);
+            config.Timeout = new TimeSpan(0, 0, 30); // TODO: get this from config?
             config.DefaultRequestHeaders.Clear();
         });
     }
