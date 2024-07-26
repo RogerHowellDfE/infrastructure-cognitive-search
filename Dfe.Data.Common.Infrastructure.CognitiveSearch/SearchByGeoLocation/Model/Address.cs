@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByGeoLocation.Model;
 
 /// <summary>
-/// Provides a type for capturing key features of a search address response.
+/// Provides a type for capturing key address features of a search location response.
 /// </summary>
 [DataContract(Name = "Address")]
 public sealed class Address
