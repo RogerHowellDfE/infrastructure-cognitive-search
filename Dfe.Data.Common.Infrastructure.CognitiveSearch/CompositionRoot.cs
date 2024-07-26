@@ -59,7 +59,12 @@ public static class CompositionRoot
             ArgumentNullException.ThrowIfNullOrWhiteSpace(geoLocationOptions.MapsServiceUri);
 
             config.BaseAddress = new Uri(geoLocationOptions.MapsServiceUri);
-            config.Timeout = new TimeSpan(0, 0, 30); // TODO: get this from config?
+            config.Timeout =
+                new TimeSpan(
+                    geoLocationOptions.RequestTimeOutHours,
+                    geoLocationOptions.RequestTimeOutMinutes,
+                    geoLocationOptions.RequestTimeOutSeconds);
+
             config.DefaultRequestHeaders.Clear();
         });
     }

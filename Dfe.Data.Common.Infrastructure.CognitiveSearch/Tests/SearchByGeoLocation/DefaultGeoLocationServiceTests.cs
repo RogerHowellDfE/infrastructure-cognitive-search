@@ -3,8 +3,10 @@ using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByGeoLocation.Model;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByGeoLocation.Options;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch.SearchByGeoLocation.Providers;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.Search.TestDoubles;
+using Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.SearchByGeoLocation.Resources;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.SearchByGeoLocation.TestDoubles;
 using Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.SearchByGeoLocation.TestDoubles.StubBuilders;
+using FluentAssertions;
 using Microsoft.Extensions.Options;
 using System.Net;
 using Xunit;
@@ -39,12 +41,12 @@ namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.SearchByGeoLocati
             var options = IOptionsTestDouble.IOptionsMockFor(geoLocationOptions);
 
             // act, assert
-            HttpRequestException exception =
-                 await Assert.ThrowsAsync<HttpRequestException>(() =>
-                     new DefaultGeoLocationService(geoLocationClientProvider, options)
-                        .SearchGeoLocationAsync("Invalid"));
-
-            Assert.Equal("Response status code does not indicate success: 404 (Not Found).", exception.Message);
+            _ = new DefaultGeoLocationService(geoLocationClientProvider, options)
+                .Invoking(async service =>
+                    await service.SearchGeoLocationAsync("Invalid"))
+                        .Should()
+                            .ThrowAsync<HttpRequestException>()
+                            .WithMessage("Response status code does not indicate success: 404 (Not Found).");
         }
 
         [Fact]
@@ -103,12 +105,10 @@ namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.SearchByGeoLocati
         public async Task SearchGeoLocationAsync_With_Positive_Succes_Status_Return_Expected_Result()
         {
             // arrange
-            const string RawResonse =
-                "{\"summary\":{\"query\":\"15127NE24thStreet,Redmond,WA98052\",\"queryType\":\"NON_NEAR\",\"queryTime\":58,\"numResults\":1,\"offset\":0,\"totalResults\":1,\"fuzzyLevel\":1},\"results\":[{\"type\":\"PointAddress\",\"id\":\"US/PAD/p0/19173426\",\"score\":14.51,\"address\":{\"streetNumber\":\"15127\",\"streetName\":\"NE24thSt\",\"municipalitySubdivision\":\"Redmond\",\"municipality\":\"Redmond,Adelaide,AmesLake,Avondale,Earlmount\",\"countrySecondarySubdivision\":\"King\",\"countryTertiarySubdivision\":\"SeattleEast\",\"countrySubdivisionCode\":\"WA\",\"postalCode\":\"98052\",\"extendedPostalCode\":\"980525544\",\"countryCode\":\"US\",\"country\":\"UnitedStatesOfAmerica\",\"countryCodeISO3\":\"USA\",\"freeformAddress\":\"15127NE24thSt,Redmond,WA980525544\",\"countrySubdivisionName\":\"Washington\"},\"position\":{\"lat\":47.6308,\"lon\":-122.1385},\"viewport\":{\"topLeftPoint\":{\"lat\":47.6317,\"lon\":-122.13983},\"btmRightPoint\":{\"lat\":47.6299,\"lon\":-122.13717}},\"entryPoints\":[{\"type\":\"main\",\"position\":{\"lat\":47.6315,\"lon\":-122.13852}}]}]}";
-
+            string rawJson = await JsonFileLoader.LoadJsonFile("GeoLocationSearchResponse.json");
 
             IGeoLocationClientProvider? geoLocationClientProvider =
-                GeoLocationClientProviderTestDouble.CreateWithHttpStatusAndResponse(HttpStatusCode.OK, RawResonse);
+                GeoLocationClientProviderTestDouble.CreateWithHttpStatusAndResponse(HttpStatusCode.OK, rawJson);
             var geoLocationOptions =
                 new GeoLocationOptionsBuilder().Create();
             var options = IOptionsTestDouble.IOptionsMockFor(geoLocationOptions);
