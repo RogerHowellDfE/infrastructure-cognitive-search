@@ -32,7 +32,7 @@ namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.SearchByGeoLocati
         }
 
         [Fact]
-        public async Task SearchGeoLocationAsync_With_Negative_Succes_Status_Throw_Expected_Exception()
+        public void SearchGeoLocationAsync_With_Negative_Success_Status_Throw_Expected_Exception()
         {
             // arrange
             IGeoLocationClientProvider? geoLocationClientProvider =
@@ -102,7 +102,7 @@ namespace Dfe.Data.Common.Infrastructure.CognitiveSearch.Tests.SearchByGeoLocati
         }
 
         [Fact]
-        public async Task SearchGeoLocationAsync_With_Positive_Succes_Status_Return_Expected_Result()
+        public async Task SearchGeoLocationAsync_With_Positive_Success_Status_Return_Expected_Result()
         {
             // arrange
             string rawJson = await JsonFileLoader.LoadJsonFile("GeoLocationSearchResponse.json");

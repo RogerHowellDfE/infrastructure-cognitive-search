@@ -38,7 +38,7 @@ public class SearchByKeywordClientProviderTests
     }
 
     [Fact]
-    public async Task InvokeSearchClientAsync_WithInvalidSearchOptionsUri_ThrowsUriFormatException()
+    public void InvokeSearchClientAsync_WithInvalidSearchOptionsUri_ThrowsUriFormatException()
     {
         // arrange
         const string indexName = "index1";
@@ -60,7 +60,7 @@ public class SearchByKeywordClientProviderTests
     }
 
     [Fact]
-    public async Task InvokeSearchClientAsync_WithInvalidSearchOptionsCredentials_ThrowsArgumentException()
+    public void InvokeSearchClientAsync_WithInvalidSearchOptionsCredentials_ThrowsArgumentException()
     {
         // arrange
         const string indexName = "index1";
@@ -82,7 +82,7 @@ public class SearchByKeywordClientProviderTests
     }
 
     [Fact]
-    public async Task InvokeSearchClientAsync_WithEmptySearchOptionsIndex_ThrowsSearchClientInvocationException()
+    public void InvokeSearchClientAsync_WithEmptySearchOptionsIndex_ThrowsSearchClientInvocationException()
     {
         // arrange
         const string indexName = "index1";
