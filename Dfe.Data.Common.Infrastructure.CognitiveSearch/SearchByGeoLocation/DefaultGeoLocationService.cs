@@ -38,7 +38,7 @@ public sealed class DefaultGeoLocationService : IGeoLocationService
     }
 
     /// <summary>
-    /// Makes call to underlying azure location service and uses the prescribed HttpClient to
+    /// Makes a call to the underlying azure location service and uses the prescribed HttpClient to
     /// manage the request and aggregate the result(s) based on the status of the response.
     /// </summary>
     /// <param name="location">
