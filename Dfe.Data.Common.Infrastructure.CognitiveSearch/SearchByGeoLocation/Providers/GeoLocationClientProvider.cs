@@ -35,7 +35,9 @@ public class GeoLocationClientProvider : IGeoLocationClientProvider
     /// <returns>
     /// A configured instance of the HttpClient specified (via GeoLocationHttpClientKey).
     /// </returns>
-    /// <exception cref="GeoLocationClientInvocationException"></exception>
+    /// <exception cref="GeoLocationClientInvocationException">
+    /// Custom exception used to indicate an error has occurred invoking a geo-location HttpClient.
+    /// </exception>
     public Task<HttpClient> InvokeGeoLocationClientAsync()
     {
         var geoLocationClient =

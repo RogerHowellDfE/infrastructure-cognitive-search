@@ -8,6 +8,8 @@ public interface IGeoLocationClientProvider
     /// <summary>
     /// Creates an instance of a configured HttpClient in support of geo-location requests.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// A configured HttpClient instance for making location requests.
+    /// </returns>
     Task<HttpClient> InvokeGeoLocationClientAsync();
 }
