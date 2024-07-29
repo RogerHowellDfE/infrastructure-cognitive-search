@@ -11,16 +11,25 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 namespace Dfe.Data.Common.Infrastructure.CognitiveSearch;
 
 /// <summary>
-/// 
+/// The composition root provides a unified location in the application where the composition
+/// of the object graphs for the application take place, using the dependency injection (IOC).
 /// </summary>
 public static class CompositionRoot
 {
     /// <summary>
-    /// 
+    /// Extension method which provides all the pre-registrations required to
+    /// access azure search services, and perform searches across provisioned indexes.
     /// </summary>
-    /// <param name="services"></param>
-    /// <param name="configuration"></param>
-    /// <exception cref="ArgumentNullException"></exception>
+    /// <param name="services">
+    /// The originating application services onto which to register the search dependencies.
+    /// </param>
+    /// <param name="configuration">
+    /// The originating configuration block from which to derive search service settings.
+    /// </param>
+    /// <exception cref="ArgumentNullException">
+    /// The exception thrown if no valid T:Microsoft.Extensions.DependencyInjection.IServiceCollection
+    /// is provisioned.
+    /// </exception>
     public static void AddDefaultCognitiveSearchServices(this IServiceCollection services, IConfiguration configuration)
     {
         if (services is null)

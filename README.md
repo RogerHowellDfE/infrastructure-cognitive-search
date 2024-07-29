@@ -11,64 +11,90 @@ In order to leverage the search functionality it is necessary to register a numb
 In order to use the default search services it is possible to register all dependcies listed under the default composition root, in one registration, as follows:
 
 ```
-builder.Services.RegisterDefaultSearchServices(builder.Configuration);
+builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
 ```
 
 Alternatively, the registrations can be configured in the consuming application IOC container, with a typical registration configured as follows:
 
 ```
-builder.Services.AddAzureCognitiveSearchProvider(builder.Configuration);
-builder.Services.AddScoped(typeof(ISearchServiceAdapter), typeof(CognitiveSearchServiceAdapter<Infrastructure.Establishment>));
-builder.Services.AddScoped<IUseCase<SearchByKeywordRequest, SearchByKeywordResponse>, SearchByKeywordUseCase>();
-builder.Services.AddSingleton(typeof(IMapper<Response<SearchResults<Infrastructure.Establishment>>, EstablishmentResults>), typeof(AzureSearchResponseToEstablishmentResultMapper));
-builder.Services.AddSingleton<IMapper<SearchSettingsOptions, SearchOptions>, SearchOptionsToAzureOptionsMapper>();
-builder.Services.AddSingleton<IMapper<SearchByKeywordResponse, SearchResultsViewModel>, SearchByKeywordResponseToViewModelMapper>();
-builder.Services.AddSingleton<IMapper<Infrastructure.Establishment, Search.Establishment>, AzureSearchResultToEstablishmentMapper>();
-builder.Services.AddSingleton<IMapper<EstablishmentResults, SearchByKeywordResponse>, ResultsToResponseMapper>();
+services.TryAddSingleton<ISearchByKeywordClientProvider, SearchByKeywordClientProvider>();
+        services.TryAddSingleton<ISearchIndexNamesProvider, SearchIndexNamesProvider>();
+        services.TryAddSingleton<ISearchByKeywordService, DefaultSearchByKeywordService>();
+        services.TryAddScoped<IGeoLocationClientProvider, GeoLocationClientProvider>();
+        services.TryAddScoped<IGeoLocationService, DefaultGeoLocationService>();
 
-builder.Services.AddOptions<SearchSettingsOptions>("establishments")
-    .Configure<IConfiguration>(
-        (settings, configuration) =>
-            configuration.GetSection("AzureCognitiveSearchOptions:SearchEstablishment:SearchSettingsOptions").Bind(settings));
+        services.AddOptions<SearchByKeywordClientOptions>()
+           .Configure<IConfiguration>(
+               (settings, configuration) =>
+                   configuration
+                       .GetSection(nameof(SearchByKeywordClientOptions))
+                       .Bind(settings));
 
-builder.Services.AddScoped<ISearchOptionsFactory, SearchOptionsFactory>();
-```
+        services.AddOptions<GeoLocationOptions>()
+           .Configure<IConfiguration>(
+               (settings, configuration) =>
+                   configuration
+                       .GetSection(nameof(GeoLocationOptions))
+                       .Bind(settings));
+
+        services.AddHttpClient("GeoLocationHttpClient", config =>
+        {
+            var geoLocationOptions =
+                configuration
+                    .GetSection(nameof(GeoLocationOptions)).Get<GeoLocationOptions>();
+
+            ArgumentNullException.ThrowIfNull(geoLocationOptions);
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(geoLocationOptions.MapsServiceUri);
+
+            config.BaseAddress = new Uri(geoLocationOptions.MapsServiceUri);
+            config.Timeout =
+                new TimeSpan(
+                    geoLocationOptions.RequestTimeOutHours,
+                    geoLocationOptions.RequestTimeOutMinutes,
+                    geoLocationOptions.RequestTimeOutSeconds);
+
+            config.DefaultRequestHeaders.Clear();
+        });```
 ### Code Usage/Examples
 
 Typical dependency injection and search request would look something like the following,
 
 ```
-public class HomeController : Controller
+public sealed class CognitiveSearchServiceAdapter<TSearchResult> : ISearchServiceAdapter where TSearchResult : class
 {
-    private readonly IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> _searchByKeywordUseCase;
-    private readonly IMapper<SearchByKeywordResponse, SearchResultsViewModel> _mapper;
+    private readonly ISearchService _cognitiveSearchService;
+    private readonly ISearchOptionsFactory _searchOptionsFactory;
+    private readonly IMapper<Response<SearchResults<TSearchResult>>, EstablishmentResults> _searchResponseMapper;
 
-    public HomeController(
-        ILogger<HomeController> logger,
-        IUseCase<SearchByKeywordRequest, SearchByKeywordResponse> searchByKeywordUseCase,
-        IMapper<SearchByKeywordResponse, SearchResultsViewModel> mapper)
+    public CognitiveSearchServiceAdapter(
+        ISearchService cognitiveSearchService,
+        ISearchOptionsFactory searchOptionsFactory,
+        IMapper<Response<SearchResults<TSearchResult>>, EstablishmentResults> searchResponseMapper)
     {
-        _searchByKeywordUseCase = searchByKeywordUseCase;
-        _mapper = mapper;
+        _searchOptionsFactory = searchOptionsFactory;
+        _cognitiveSearchService = cognitiveSearchService;
+        _searchResponseMapper = searchResponseMapper;
     }
 
-    public async Task<IActionResult> Index(string searchKeyWord)
+    public async Task<EstablishmentResults> SearchAsync(SearchContext searchContext)
     {
-        if (string.IsNullOrEmpty(searchKeyWord))
-        {
-            return View();
-        }
-        ViewBag.SearchQuery = searchKeyWord;
+        SearchOptions searchOptions =
+            _searchOptionsFactory.GetSearchOptions(searchContext.TargetCollection) ??
+            throw new ApplicationException(
+                $"Search options cannot be derived for {searchContext.TargetCollection}.");
 
-        SearchByKeywordResponse response =
-            await _searchByKeywordUseCase.HandleRequest(
-                new SearchByKeywordRequest(searchKeyWord, "establishments"));
+        Response<SearchResults<TSearchResult>> searchResults =
+            await _cognitiveSearchService.SearchAsync<TSearchResult>(
+                searchContext.SearchKeyword,
+                searchContext.TargetCollection,
+                searchOptions
+            )
+            .ConfigureAwait(false) ??
+                throw new ApplicationException(
+                    $"Unable to derive search results based on input {searchContext.SearchKeyword}.");
 
-        SearchResultsViewModel viewModel = _mapper.MapFrom(response);
-        return View(viewModel);
-    }
-}
-```
+        return _searchResponseMapper.MapFrom(searchResults);
+    }```
 
 ## Built With
 
