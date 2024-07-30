@@ -18,43 +18,44 @@ Alternatively, the registrations can be configured in the consuming application 
 
 ```
 services.TryAddSingleton<ISearchByKeywordClientProvider, SearchByKeywordClientProvider>();
-        services.TryAddSingleton<ISearchIndexNamesProvider, SearchIndexNamesProvider>();
-        services.TryAddSingleton<ISearchByKeywordService, DefaultSearchByKeywordService>();
-        services.TryAddScoped<IGeoLocationClientProvider, GeoLocationClientProvider>();
-        services.TryAddScoped<IGeoLocationService, DefaultGeoLocationService>();
+services.TryAddSingleton<ISearchIndexNamesProvider, SearchIndexNamesProvider>();
+services.TryAddSingleton<ISearchByKeywordService, DefaultSearchByKeywordService>();
+services.TryAddScoped<IGeoLocationClientProvider, GeoLocationClientProvider>();
+services.TryAddScoped<IGeoLocationService, DefaultGeoLocationService>();
 
-        services.AddOptions<SearchByKeywordClientOptions>()
-           .Configure<IConfiguration>(
-               (settings, configuration) =>
-                   configuration
-                       .GetSection(nameof(SearchByKeywordClientOptions))
-                       .Bind(settings));
+services.AddOptions<SearchByKeywordClientOptions>()
+   .Configure<IConfiguration>(
+	   (settings, configuration) =>
+		   configuration
+			   .GetSection(nameof(SearchByKeywordClientOptions))
+			   .Bind(settings));
 
-        services.AddOptions<GeoLocationOptions>()
-           .Configure<IConfiguration>(
-               (settings, configuration) =>
-                   configuration
-                       .GetSection(nameof(GeoLocationOptions))
-                       .Bind(settings));
+services.AddOptions<GeoLocationOptions>()
+   .Configure<IConfiguration>(
+	   (settings, configuration) =>
+		   configuration
+			   .GetSection(nameof(GeoLocationOptions))
+			   .Bind(settings));
 
-        services.AddHttpClient("GeoLocationHttpClient", config =>
-        {
-            var geoLocationOptions =
-                configuration
-                    .GetSection(nameof(GeoLocationOptions)).Get<GeoLocationOptions>();
+services.AddHttpClient("GeoLocationHttpClient", config =>
+{
+	var geoLocationOptions =
+		configuration
+			.GetSection(nameof(GeoLocationOptions)).Get<GeoLocationOptions>();
 
-            ArgumentNullException.ThrowIfNull(geoLocationOptions);
-            ArgumentNullException.ThrowIfNullOrWhiteSpace(geoLocationOptions.MapsServiceUri);
+	ArgumentNullException.ThrowIfNull(geoLocationOptions);
+	ArgumentNullException.ThrowIfNullOrWhiteSpace(geoLocationOptions.MapsServiceUri);
 
-            config.BaseAddress = new Uri(geoLocationOptions.MapsServiceUri);
-            config.Timeout =
-                new TimeSpan(
-                    geoLocationOptions.RequestTimeOutHours,
-                    geoLocationOptions.RequestTimeOutMinutes,
-                    geoLocationOptions.RequestTimeOutSeconds);
+	config.BaseAddress = new Uri(geoLocationOptions.MapsServiceUri);
+	config.Timeout =
+		new TimeSpan(
+			geoLocationOptions.RequestTimeOutHours,
+			geoLocationOptions.RequestTimeOutMinutes,
+			geoLocationOptions.RequestTimeOutSeconds);
 
-            config.DefaultRequestHeaders.Clear();
-        });```
+	config.DefaultRequestHeaders.Clear();
+});```
+
 ### Code Usage/Examples
 
 Typical dependency injection and search request would look something like the following,
