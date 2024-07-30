@@ -5,11 +5,11 @@ A library to provide an accessible API for working with Azure cognitive search. 
 
 ## Getting Started
 
-The dependencies can be used in isolation or registered as a whole under a single composition root. For example, you opt to use the GeoLocationClientProvider and create your own concrete geo-locatio service implementation, raher than using the default provided. 
+The dependencies can be used in isolation or registered as a whole under a single composition root. For example, you could opt to use the GeoLocationClientProvider and create your own concrete geo-location service implementation, rather than using the default provided. 
 
 ### Prerequisites
 
-In order to use the default search services it is possible to register all dependcies listed under the default composition root, in one registration, as follows:
+In order to use the default search services it is possible to register all dependencies listed under the default composition root, in one registration, as follows:
 
 ```
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
