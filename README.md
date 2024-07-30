@@ -1,10 +1,11 @@
 
 # infrastructure-cognitive-search
+
 A library to provide an accessible API for working with Azure cognitive search. The package contains a fully configured default service for searching by keyword, as well as a geo-location service which allows searches to be made by town, or post-code. The package is intended to take the heavy-lifting away in terms of setup and configurartion and allow for an easy, pluggable set of components that can be used across projects. 
 
-
 ## Getting Started
-In order to leverage the search functionality it is necessary to register a number of default dependencies. The dependencies can be used in isolation or registered as a whole under a single composition root, as below.
+
+The dependencies can be used in isolation or registered as a whole under a single composition root. For example, you opt to use the GeoLocationClientProvider and create your own concrete geo-locatio service implementation, raher than using the default provided. 
 
 ### Prerequisites
 
@@ -14,7 +15,7 @@ In order to use the default search services it is possible to register all depen
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
 ```
 
-Alternatively, the registrations can be configured in the consuming application IOC container, with a typical registration configured as follows:
+Alternatively, the registrations can be configured in the consuming application's IOC container, with a typical registration configured similar to the following:
 
 ```
 services.TryAddSingleton<ISearchByKeywordClientProvider, SearchByKeywordClientProvider>();
@@ -54,7 +55,8 @@ services.AddHttpClient("GeoLocationHttpClient", config =>
 			geoLocationOptions.RequestTimeOutSeconds);
 
 	config.DefaultRequestHeaders.Clear();
-});```
+});
+```
 
 ### Code Usage/Examples
 
@@ -95,7 +97,9 @@ public sealed class CognitiveSearchServiceAdapter<TSearchResult> : ISearchServic
                     $"Unable to derive search results based on input {searchContext.SearchKeyword}.");
 
         return _searchResponseMapper.MapFrom(searchResults);
-    }```
+    }
+}
+```
 
 ## Built With
 
@@ -116,5 +120,3 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-
