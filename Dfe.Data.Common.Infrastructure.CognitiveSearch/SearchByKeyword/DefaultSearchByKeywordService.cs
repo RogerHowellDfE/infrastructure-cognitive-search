@@ -54,6 +54,15 @@ public sealed class DefaultSearchByKeywordService : ISearchByKeywordService
     /// <returns>
     /// The response containing search results from an index.
     /// </returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown when the param <paramref name="searchKeyword"/> or the param <paramref name="searchIndex"/> are null or empty
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when the param <paramref name="searchOptions"/>is null
+    /// </exception>
+    /// <exception cref="RequestFailedException">
+    /// Thrown when a failure is returned by the Azure Search Service
+    /// </exception>
     public Task<Response<SearchResults<TSearchResult>>> SearchAsync<TSearchResult>(
         string searchKeyword, string searchIndex, SearchOptions searchOptions)
         where TSearchResult : class
