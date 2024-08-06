@@ -36,4 +36,4 @@ jobs:
     - name: Pack
       run: dotnet pack --configuration Release --no-build --output ./nupkg /p:PackageVersion=${{ steps.version_step.outputs.fullSemVer }}
     - name: Publish
-      run: dotnet nuget push ./nupkg/*.nupkg --source github --api-key ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet nuget push ./nupkg/*.nupkg --source nuget.pkg.github.com/DFE-Digital/index.json --api-key ${{ secrets.GITHUB_TOKEN }}
