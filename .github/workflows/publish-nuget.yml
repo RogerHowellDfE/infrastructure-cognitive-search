@@ -18,10 +18,10 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Install GitVersion
-      uses: gittools/actions/gitversion/execute@v0.9.10
+      uses: gittools/actions/gitversion/execute@v0.9.14
       id: gitversion
     - name: Set version
-      run: echo "##vso[build.updatebuildnumber]${{ steps.gitversion.outputs.semver }}"
+      run: echo "##vso[build.updatebuildnumber]${{ steps.gitversion.outputs.SemVer }}"
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
@@ -29,6 +29,6 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Pack
-      run: dotnet pack --configuration Release --no-build --output ./nupkg /p:PackageVersion=${{ steps.gitversion.outputs.semver }}
+      run: dotnet pack --configuration Release --no-build --output ./nupkg /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
     - name: Publish
       run: dotnet nuget push ./nupkg/*.nupkg --source github --api-key ${{ secrets.GITHUB_TOKEN }}
