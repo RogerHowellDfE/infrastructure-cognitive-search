@@ -11,13 +11,13 @@ The dependencies can be used in isolation or registered as a whole under a singl
 
 In order to use the default search services it is possible to register all dependencies listed under the default composition root, in one registration, as follows:
 
-```
+```csharp
 builder.Services.AddDefaultCognitiveSearchServices(builder.Configuration);
 ```
 
 Alternatively, the registrations can be configured in the consuming application's IOC container, with a typical registration configured similar to the following:
 
-```
+```csharp
 services.TryAddSingleton<ISearchByKeywordClientProvider, SearchByKeywordClientProvider>();
 services.TryAddSingleton<ISearchIndexNamesProvider, SearchIndexNamesProvider>();
 services.TryAddSingleton<ISearchByKeywordService, DefaultSearchByKeywordService>();
@@ -62,7 +62,7 @@ services.AddHttpClient("GeoLocationHttpClient", config =>
 
 Typical dependency injection and search request would look something like the following,
 
-```
+```csharp
 public sealed class CognitiveSearchServiceAdapter<TSearchResult> : ISearchServiceAdapter where TSearchResult : class
 {
     private readonly ISearchService _cognitiveSearchService;
