@@ -4,11 +4,25 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-  </PropertyGroup>
+    
+    <PackageId>Dfe.Data.Common.Infrastructure.CognitiveSearch</PackageId>
+    <Version>1.0.2-beta</Version>
+    <Authors>Department for Education (DfE)</Authors>
+    <Company>Department for Education (DfE)</Company>
+    <Copyright>Department for Education (DfE)</Copyright>
+    <PackageDescription>A library to provide an accessible API for working with Azure cognitive search. The package contains a fully configured default service for searching by keyword, as well as a geo-location service which allows searches to be made by town, or post-code. The package is intended to take the heavy-lifting away in terms of setup and configurartion and allow for an easy, pluggable set of components that can be used across projects.</PackageDescription>
+    <PackageProjectUrl>https://github.com/DFE-Digital/infrastructure-cognitive-search</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DFE-Digital/infrastructure-cognitive-search</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
 
-  <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>
