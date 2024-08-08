@@ -34,12 +34,8 @@ jobs:
 
     - name: Determine version number to use
       run: |
-        version=0.0.1-dev ## Default version
-        
-        ## If this is a push to main, use the version from GitVersion
-        if [[ ${{ github.event_name }} == 'push' ]]; then
-          version=${{ steps.version_step.outputs.fullSemVer }}
-        fi
+        ## Default to using the version from GitVersion
+        version=${{ steps.version_step.outputs.fullSemVer }}
         
         ## If this is a tag, use the version from the tag
         if [[ ${{ github.event_name }} == 'push' && ${{ github.ref }} == 'refs/tags/v*' ]]; then
