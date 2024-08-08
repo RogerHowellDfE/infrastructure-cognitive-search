@@ -37,7 +37,7 @@ jobs:
         version=0.0.1-dev ## Default version
         
         ## If this is a push to main, use the version from GitVersion
-        if [[ ${{ github.event_name }} == 'push' && ${{ github.ref }} == 'refs/heads/main' ]]; then
+        if [[ ${{ github.event_name }} == 'push' ]]; then
           version=${{ steps.version_step.outputs.fullSemVer }}
         fi
         
