@@ -48,7 +48,7 @@ jobs:
         fi
         
         echo "Version to use: $version"
-        echo "::set-env name=VERSION::$version"        
+        echo "VERSION=$version" >> $GITHUB_ENV
         
     - name: Restore dependencies
       run: dotnet restore
